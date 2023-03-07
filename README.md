@@ -1,2 +1,2 @@
-# Arma-3-Project-CombinedArmrs
+# Arma-3-Project-CombinedArms
 Project CombinedArms
