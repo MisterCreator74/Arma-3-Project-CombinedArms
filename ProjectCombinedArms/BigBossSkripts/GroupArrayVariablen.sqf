@@ -1,6 +1,6 @@
 /*
 	Autor: MisterCreator74
-	Version: 1.1
+	Version: 1.2
 	Beschreibung:
 	Gibt jedem Squad den jeweiligen SquadTyp. Dieser wird mit group getVariable ["groupType", "Standartwert"]; Abgefragt und aller 10 Sekunden aktualisiert, damit auch neue Squads zugeordnert sind.
 	Zusätzlich wird ein Array mit allen Blufor und Opfor Squads erstellt.
