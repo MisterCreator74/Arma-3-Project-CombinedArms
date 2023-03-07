@@ -1,9 +1,6 @@
 Arma III Project Combined Arms Changelog
 
 
-Bekannte Fehler:
-Prioritätssystem: Logikfehler schaltet falsch um -> umprogrammieren (V1.0.6)
-Statussystem: entscheidungsfehler beim verlassen im nicht gecapten zustand (nur bei Blufor) -> Quelle nicht bekannt (ab V1.0.4)
 
 V1.0.0 - Grundlegendes Setup, Debug Menü, main_settings.sqf, Ordnerstruktur abgelegt, Garbage collector eingefügt
 V1.0.1 - Diverse Anderungen am Garbage Collector. Advanced Killcounter entfernt da nicht mehr nötig. Backup Version: 2.7
@@ -18,4 +15,7 @@ V1.0.5 - komplette umstellung auf das neue Array Skript
 V1.0.6 - Prioritätssystem eingeführt 
 
 
+Bekannte Fehler:
+Prioritätssystem: Logikfehler schaltet falsch um -> umprogrammieren (V1.0.6)
+Statussystem: entscheidungsfehler beim verlassen im nicht gecapten zustand (nur bei Blufor) -> Quelle nicht bekannt (ab V1.0.4)
 
