@@ -1,6 +1,6 @@
 /*
 	Autor: MisterCreator74
-	Version: 1.0.6
+	Version: 1.0.7
 	Beschreibung:
 	Beinhaltet alle grundlegenden Einstellungen für Arma 3 Advanced Scripts.
 	
