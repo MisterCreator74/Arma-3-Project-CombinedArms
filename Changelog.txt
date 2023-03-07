@@ -1,0 +1,21 @@
+Arma III Project Combined Arms Changelog
+
+
+Bekannte Fehler:
+Prioritätssystem: Logikfehler schaltet falsch um -> umprogrammieren (V1.0.6)
+Statussystem: entscheidungsfehler beim verlassen im nicht gecapten zustand (nur bei Blufor) -> Quelle nicht bekannt (ab V1.0.4)
+
+V1.0.0 - Grundlegendes Setup, Debug Menü, main_settings.sqf, Ordnerstruktur abgelegt, Garbage collector eingefügt
+V1.0.1 - Diverse Anderungen am Garbage Collector. Advanced Killcounter entfernt da nicht mehr nötig. Backup Version: 2.7
+V1.0.2 - Einführung Hauptarray + kleine Debug Änderungen, Hauptarry beinhaltet Priorität von Opfor und Blufor. Und kann diese automatisch aufgrund der Entfernung 
+	 berechnen, oder vom Benutzer festlegen lassen
+V1.0.3 - Hauparray beinhaltet Priorität und kann diese dynamisch berechen je nach dem von wem eingenommen und Entfernung, Diverse Einstellungen, Systemchat, 
+	 Verbeserung der Nutzerfreuindlichkeit beim platieren -> fehler durch abfangen von Leeren eingabewerten vermieden
+V1.0.4 - Neues Array, alle Funktionen des Arrays überarbeitet -> mehr Fehler werden vermieden. Alle Arrayinhalte in neuem SubArray gespeichert ->[[pos], Name, Größe, Status, prioBlue, prioOpf]
+	 neue einträge können ohne Änderung eingefügt werden. Alle Einträge können jederzeit ausgelesen und bearbeitet werden. SubArray kann über arrayindex aufgerufen werden, einzelne Elemente über das SubArray
+	 Änderungen erfolgen ausschlieslich über das subarray
+V1.0.5 - komplette umstellung auf das neue Array Skript
+V1.0.6 - Prioritätssystem eingeführt 
+
+
+
