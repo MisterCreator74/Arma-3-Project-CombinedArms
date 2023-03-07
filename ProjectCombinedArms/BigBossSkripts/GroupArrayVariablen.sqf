@@ -9,7 +9,7 @@
 */
 
 
-getGroupType = 
+fnc_getGroupType = 
 {
 	private ["_grp","_vehlist","_cars","_apcs","_tanks","_helis","_planes","_boats","_veh","_type"];
 
@@ -127,7 +127,7 @@ fnc_groupTypeChange =
 	
 	if (_grouptype == "empty") then
 	{
-		_grouptype = _grp call  getGroupType;
+		_grouptype = _grp call  fnc_getGroupType;
 		_grp setVariable ["groupTypeChange", "change"];
 		_grp setVariable ["groupType",_grouptype];
 
@@ -135,7 +135,7 @@ fnc_groupTypeChange =
 	
 	if (_grouptype != "empty" && _toChange == "change") then
 	{
-		_grouptype = _grp call  getGroupType;
+		_grouptype = _grp call  fnc_getGroupType;
 		_grp setVariable ["groupType",_grouptype];
 		_grp setVariable ["groupTypeChange", "locked"];
 
