@@ -1,6 +1,6 @@
 /*
 	Autor: MisterCreator74
-	Version: 1.2
+	Version: 1.3
 	Beschreibung:
 	Gibt jedem Squad den jeweiligen SquadTyp. Dieser wird mit group getVariable ["groupType", "Standartwert"]; Abgefragt und kann über den Truppführer aktualisiert werden, damit auch neue Squads zugeordnert sind.
 	Zusätzlich wird ein Array mit allen Blufor und Opfor Squads erstellt.
@@ -123,7 +123,7 @@ fnc_groupTypeChange =
 	_toChange = _grp getVariable ["groupTypeChange", "empty"];
 	_grouptype = _grp getVariable ["groupType", "empty"];
 
-	hint format ["Type: %1 \n TypeChange: %2 \n Group: %3", _grouptype, _toChange, _grp];
+	//hint format ["Type: %1 \n TypeChange: %2 \n Group: %3", _grouptype, _toChange, _grp];
 	
 	if (_grouptype == "empty") then
 	{
@@ -135,9 +135,23 @@ fnc_groupTypeChange =
 	
 	if (_grouptype != "empty" && _toChange == "change") then
 	{
-		_grouptype = _grp call  fnc_getGroupType;
-		_grp setVariable ["groupType",_grouptype];
-		_grp setVariable ["groupTypeChange", "locked"];
+		
+		_NewGrouptype = _grp call  fnc_getGroupType;
+		[_grp, _grouptype, _NewGrouptype] spawn 
+		{
+			params ["_grp", "_grouptype", "_NewGrouptype"];
+			_result = [format ["Are you sure you want to Change your GroupType from '%1' to '%2'?",_grouptype,	_NewGrouptype], "Project CombinedArms", "Yes", "No", [] call BIS_fnc_displayMission, false, false] call BIS_fnc_guiMessage;
+			if (_result) then 
+			{
+				_grp setVariable ["groupType",_NewGrouptype];
+				_grp setVariable ["groupTypeChange", "locked"];
+				systemChat format ["Project CombinedArms: %1 changed GroupType from '%2' to '%3' and will now recive %4 orders.", _grp, _grouptype, _NewGrouptype, _NewGrouptype];
+			}
+			else 
+			{
+				_grp setVariable ["groupTypeChange", "locked"];
+			};
+		};
 
 	};
 	

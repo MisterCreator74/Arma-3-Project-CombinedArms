@@ -1,12 +1,12 @@
 /*
 	Autor: MisterCreator74
-	Version: 1.0.8
+	Version: 1.0.9
 	Beschreibung:
 	Beinhaltet alle grundlegenden Einstellungen für Arma 3 Advanced Scripts.
 	
 */
 
-_Version = "1.0.6";;
+_Version = "1.0.9";;
 
 // 1.Debug Settings:
 show_debug_hints = false;

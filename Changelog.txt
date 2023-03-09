@@ -18,6 +18,6 @@ V1.0.5 - komplette umstellung auf das neue Array Skript
 V1.0.6 - Prioritätssystem eingeführt 
 V1.0.7 - Erste Kommando befehle
 V1.0.8 - GruppenTyp eingeführt um kommandos zu unterscheiden
-
+V1.0.9 - Change SquadType System established. Not tested in Multiplayer
 
 
