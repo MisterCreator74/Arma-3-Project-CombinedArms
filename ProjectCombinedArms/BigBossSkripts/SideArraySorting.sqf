@@ -6,7 +6,7 @@
 	
 */
 
-
+sleep startup_delay;
 
 0 spawn 
 {

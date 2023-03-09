@@ -6,10 +6,10 @@
 	
 */
 
-_Version = "1.0.9";;
+_Version = "1.0.9 Unstable Beta";;
 
 // 1.Debug Settings:
-show_debug_hints = false;
+show_debug_hints = true;
 debug_hint_time = 5;
 repeat_Array_hints = false;
 
@@ -64,7 +64,7 @@ if (show_debug_hints == true) then
 			};
 		}foreach settingsArray;
 		
-		_head = parseText "<t size='2.0'>Debugmenü:</t>";
+		_head = parseText "<t size='2.0'>Debugmenu:</t>";
 		_ver = parseText "<br/><t color='#0088ff'>Version:  </t>";
 		_separator = parseText "<br/>--------------------------------------------------------<br/>";
 		_text1 = parseText "<br/><br/>Debug Hints:                                         ";
@@ -75,7 +75,7 @@ if (show_debug_hints == true) then
 		_text6 = parseText "<br/>AICombat:                                         ";
 		_text7 = parseText "<br/>PlayerKick:                                    ";
 //		_text8 = parseText "<br/>Random Events:                      ";
-		_debugMenu = composeText [_head, _ver,_Version, _separator, "Einstellungen können in der main_settings Datei vorgenommen werden",_text1, settingsArray select 0 , _text2, settingsArray select 1, _text3, settingsArray select 2,
+		_debugMenu = composeText [_head, _ver,_Version, _separator, "Settings can be made in main_settings.sqf",_text1, settingsArray select 0 , _text2, settingsArray select 1, _text3, settingsArray select 2,
 									_text4, settingsArray select 3, _text5, settingsArray select 4, _text6, settingsArray select 5, _text7, settingsArray select 6]; //, _text8, settingsArray select 7];
 
 		hint _debugMenu;
