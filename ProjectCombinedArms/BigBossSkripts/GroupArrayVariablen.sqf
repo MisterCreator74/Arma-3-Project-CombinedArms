@@ -140,8 +140,9 @@ fnc_groupTypeChange =
 		[_grp, _grouptype, _NewGrouptype] spawn 
 		{
 			params ["_grp", "_grouptype", "_NewGrouptype"];
-			_result = [format ["Are you sure you want to Change your GroupType from '%1' to '%2'?",_grouptype,	_NewGrouptype], "Project CombinedArms", "Yes", "No", [] call BIS_fnc_displayMission, false, false] call BIS_fnc_guiMessage;
-			if (_result) then 
+			[format ["Are you sure you want to change your GroupType from '%1' to '%2'?",_grouptype, _NewGrouptype], "Project CombinedArms", "Yes", "No", [] call BIS_fnc_displayMission, false, false] remoteExec ["BIS_fnc_guiMessage", leader _grp]; // -> not able to get the Result back
+			//_result = [format ["Are you sure you want to change your GroupType from '%1' to '%2'?",_grouptype, _NewGrouptype], "Project CombinedArms", "Yes", "No", [] call BIS_fnc_displayMission, false, false] call BIS_fnc_guiMessage;
+			if (_GuiResult) then 
 			{
 				_grp setVariable ["groupType",_NewGrouptype];
 				_grp setVariable ["groupTypeChange", "locked"];
