@@ -2,11 +2,37 @@
 	Autor: MisterCreator74
 	Version: 1.4
 	Beschreibung:
-	Gibt jedem Squad den jeweiligen SquadTyp. Dieser wird mit group getVariable ["groupType", "Standartwert"]; Abgefragt und kann über den Truppführer aktualisiert werden, damit auch neue Squads zugeordnert sind.
+	Gibt jedem Squad den jeweiligen SquadTyp. Dieser wird mit group getVariable ["PCA_groupType", "Standartwert"]; Abgefragt und kann über den Truppführer aktualisiert werden, damit auch neue Squads zugeordnert sind.
 	Zusätzlich wird ein Array mit allen Blufor und Opfor Squads erstellt.
 	Rückgabewerte: Blufor Array -> bluGroups; Opfor Array -> opfGroups;
 	
 */
+
+
+fnc_showGuiMessage = {
+  params ["_message", "_callbackfn", "_callbackargs"];
+  _Guiresult = [_message, "Project CombinedArms", "Yes", "No", [] call BIS_fnc_displayMission, false, false] call BIS_fnc_guiMessage;
+  [_GuiResult, _callbackargs] remoteExec [_callbackfn, remoteExecutedOwner];
+};
+
+
+fnc_messageResult = {
+  params ["_GuiResult", "_args"];
+  _args params ["_grp", "_grouptype", "_NewGrouptype"];
+  if (_GuiResult) then 
+            {
+                _grp setVariable ["PCA_groupType",_NewGrouptype];
+                _grp setVariable ["PCA_groupTypeChange", "locked"];
+				[format ["Project CombinedArms: %1 changed GroupType from '%2' to '%3' and will now recive %4 orders.", _grp, _grouptype, _NewGrouptype, _NewGrouptype]] remoteExec ["systemChat", 0];
+            }
+            else 
+            {
+                _grp setVariable ["PCA_groupTypeChange", "locked"];
+            };      
+};
+
+publicVariable "fnc_showGuiMessage";
+publicVariable "fnc_messageResult";
 
 
 fnc_getGroupType = 
@@ -117,40 +143,28 @@ fnc_getGroupType =
 };
 
 
-fnc_showGuiMessage = {
-  params ["_message", "_callbackfn", "_callbackargs"];
-  _Guiresult = [_message, "Project CombinedArms", "Yes", "No", [] call BIS_fnc_displayMission, false, false] call BIS_fnc_guiMessage;
-  [_GuiResult, _callbackargs] remoteExec [_callbackfn, remoteExecutedOwner];
-};
-
-fnc_messageResult = {
-  params ["_GuiResult", "_args"];
-  _args params ["_grp", "_grouptype", "_NewGrouptype"];
-  if (_GuiResult) then 
-            {
-                _grp setVariable ["groupType",_NewGrouptype];
-                _grp setVariable ["groupTypeChange", "locked"];
-                systemChat format ["Project CombinedArms: %1 changed GroupType from '%2' to '%3' and will now recive %4 orders.", _grp, _grouptype, _NewGrouptype, _NewGrouptype];
-            }
-            else 
-            {
-                _grp setVariable ["groupTypeChange", "locked"];
-            };      
-};
-
 fnc_groupTypeChange = 
 {
 	_grp = _this;
-	_toChange = _grp getVariable ["groupTypeChange", "empty"];
-	_grouptype = _grp getVariable ["groupType", "empty"];
+	_toChange = _grp getVariable ["PCA_groupTypeChange", "empty"];
+	_grouptype = _grp getVariable ["PCA_groupType", "empty"];
 
 	//hint format ["Type: %1 \n TypeChange: %2 \n Group: %3", _grouptype, _toChange, _grp];
+
+	{
+		if (isPlayer _x && _toChange == "empty") then  // if (leader group _x isPlayer && _toChange == "empty") then -> noch zu testen der Rest geht
+		{	
+			[_x, ["PCA: Change GroupType", { params ["_target"]; group _target setVariable ["PCA_GroupTypeChange", "change"]; }, nil, 98, false]] remoteExec ["addAction"];
+		};
+	} forEach Units _grp;
+
+
 	
 	if (_grouptype == "empty") then
 	{
 		_grouptype = _grp call  fnc_getGroupType;
-		_grp setVariable ["groupTypeChange", "change"];
-		_grp setVariable ["groupType",_grouptype];
+		_grp setVariable ["PCA_groupTypeChange", "change"];
+		_grp setVariable ["PCA_groupType",_grouptype];
 
 	};
 	
@@ -168,24 +182,14 @@ fnc_groupTypeChange =
 	
 	if (_grouptype != "empty" && _toChange == "empty") then
 	{
-		_grp setVariable ["groupTypeChange", "locked"];
+		_grp setVariable ["PCA_groupTypeChange", "locked"];
 	};
 	
-	{
-		if (isPlayer _x && _toChange == "empty") then  // if (leader group _x isPlayer && _toChange == "empty") then -> noch zu testen der Rest geht
-		{
-			_actionID = _x addAction ["PCA: Change GroupType", tostring {
-																			_player = _this select 0;
-																			group _player setVariable ["groupTypeChange","change"];
-																		},[_x],98, false, true];
-		};
-	} forEach Units _grp;
-
+	
 };
 
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
 
 0 spawn 
 {

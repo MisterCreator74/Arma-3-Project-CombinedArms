@@ -352,13 +352,15 @@ if (repeat_Array_hints == true) then
 
 
 sleep 1;
-systemChat "Project CombinedArms: System initialized";
+["Project CombinedArms: System initialized"] remoteExec ["systemChat", 0];
+
 
 
 0 spawn 
 {	
 	sleep 5;
-	systemChat "Project CombinedArms: Priority System activated";
+	["Project CombinedArms: Priority System activated"] remoteExec ["systemChat", 0];
+
 	
 	while {true} do
 		{

@@ -2,7 +2,7 @@
 	Autor: MisterCreator74
 	Version: 1.0
 	Beschreibung:
-	group Variables: groupType | groupStatus | groupTarget | groupConnected | groupTypeChange
+	group Variables: groupType | PCA_groupStatus | PCA_groupTarget | PCA_groupConnected | PCA_groupTypeChange
 	Stati: In Caps -> Wegpunkte (z.B.: MOVE, GETIN) alles klein -> andere
 	
 	[group, taskposition, Taskdescription, Taskname, condition, Status/Waypointtype, Status when finished, vehicle] call taskcreate;
@@ -19,7 +19,7 @@ params ["_variable", "_search", "_status"];
 
 private _foundIndex = bluGroups findIf {
     _xName = _x getVariable _variable;
-    _xStatus = _x getVariable ["groupStatus", "idle"];
+    _xStatus = _x getVariable ["PCA_groupStatus", "idle"];
     _xName  == _search && (_status == "" || _xStatus  == _status)
 };
 
@@ -43,13 +43,13 @@ fnc_taskcreate = {
 																			[_taskID,"Canceled", true] call BIS_fnc_taskSetState; 
 																			deleteWaypoint [_grp,1];
 																			leader _grp removeAction _actionID;
-																			_grp setVariable ["groupStatus","idle"];
+																			_grp setVariable ["PCA_groupStatus","idle"];
 																			_transportGroup = _grp getVariable "groupConnected";
-																			_grp setVariable ["groupConnected", ""];
-																			_transportGroup setVariable ["groupConnected", ""];																			
+																			_grp setVariable ["PCA_groupConnected", ""];
+																			_transportGroup setVariable ["PCA_groupConnected", ""];																			
 																			}, [_grp, _taskID], 99, false];
 
-		_grp setVariable ["groupStatus",_status];
+		_grp setVariable ["PCA_groupStatus",_status];
 
 
 	[_grp,_taskpos,_taskdescription,_taskname, _condition, _status, _statusfinished, _vehicle, _taskID, _actionID] spawn 
@@ -67,21 +67,21 @@ fnc_taskcreate = {
 					_grp leaveVehicle _vehicle;
 				};
 				[_taskID,"Succeeded", true] call BIS_fnc_taskSetState;
-				_grp setVariable ["groupStatus",_statusfinished];
+				_grp setVariable ["PCA_groupStatus",_statusfinished];
 				deleteWaypoint [_grp,1];
 				hint "task succeeded";
 				leader _grp removeAction _actionID;
 				if (_statusfinished != "mounted") then
 				{
-					_transportGroup = _grp getVariable ["groupConnected", grpNull];
-					_grp setVariable ["groupConnected", ""];
+					_transportGroup = _grp getVariable ["PCA_groupConnected", grpNull];
+					_grp setVariable ["PCA_groupConnected", ""];
 					if (isNull _transportGroup) then
 					{
 					
 					}
 					else
 					{
-						_transportGroup setVariable ["groupConnected", ""];
+						_transportGroup setVariable ["PCA_groupConnected", ""];
 					};
 				};
 				break;
@@ -104,14 +104,14 @@ fnc_taskcreate = {
 0 spawn 
 {
 	sleep startup_delay;
-	systemChat "Project CombinedArms: AI Order System activated";
+	["Project CombinedArms: AI Order System activated"] remoteExec ["systemChat", 0];
 	while {true} do 
 	{
 		hint "cycle";
 		sleep 0.5;
 		{
-			_groupType = _x getVariable ["groupType", ""];
-			_groupStatus = _x getVariable ["groupStatus", "idle"];
+			_groupType = _x getVariable ["PCA_groupType", ""];
+			_groupStatus = _x getVariable ["PCA_groupStatus", "idle"];
 			
 			// Target aquiering 
 			_target = sortedArrayBlu select 0;
@@ -121,7 +121,7 @@ fnc_taskcreate = {
 			// Order Selection
 			if (_groupType == "infantry" && _groupStatus == "idle") then			
 			{
-				_x setVariable ["groupTarget", _target];
+				_x setVariable ["PCA_groupTarget", _target];
 				_distance = leader _x distance2d _targetpos;
 				_savePos = [_targetpos, 200, 500, 20, 0, 20, 0, [],_targetpos] call BIS_fnc_findSafePos;
 				
@@ -140,9 +140,9 @@ fnc_taskcreate = {
 					{
 						_vehicle = vehicle leader _transportGroup;																// Finding Transport vehicle
 						_pos = getpos _vehicle;																					// Finding Vehicle Pos
-						_x setVariable ["groupConnected", _transportGroup];
-						_transportGroup setVariable ["groupConnected", _x];
-						_transportGroup setVariable ["groupStatus", "transporting"];
+						_x setVariable ["PCA_groupConnected", _transportGroup];
+						_transportGroup setVariable ["PCA_groupConnected", _x];
+						_transportGroup setVariable ["PCA_groupStatus", "transporting"];
 						
 						if (getpos leader _transportGroup distance2d getPos leader _x > 1000) then 									// If transport is far away
 						{
