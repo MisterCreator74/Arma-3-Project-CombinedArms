@@ -6,10 +6,10 @@
 	
 */
 
-_Version = "1.0.9 Unstable Beta";;
+_Version = "1.1.0 Unstable Beta";;
 
 // 1.Debug Settings:
-show_debug_hints = true;
+show_debug_hints = false;
 debug_hint_time = 5;
 repeat_Array_hints = false;
 

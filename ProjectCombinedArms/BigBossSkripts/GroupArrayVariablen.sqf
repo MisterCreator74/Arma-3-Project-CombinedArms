@@ -1,6 +1,6 @@
 /*
 	Autor: MisterCreator74
-	Version: 1.3
+	Version: 1.4
 	Beschreibung:
 	Gibt jedem Squad den jeweiligen SquadTyp. Dieser wird mit group getVariable ["groupType", "Standartwert"]; Abgefragt und kann über den Truppführer aktualisiert werden, damit auch neue Squads zugeordnert sind.
 	Zusätzlich wird ein Array mit allen Blufor und Opfor Squads erstellt.
@@ -117,6 +117,27 @@ fnc_getGroupType =
 };
 
 
+fnc_showSomeMessage = {
+  params ["_message", "_callbackfn", "_callbackargs"];
+  _Guiresult = [_message, "Project CombinedArms", "Yes", "No", [] call BIS_fnc_displayMission, false, false] call BIS_fnc_guiMessage;
+  [_GuiResult, _callbackargs] remoteExec [_callbackfn, remoteExecutedOwner];
+};
+
+fnc_messageResult = {
+  params ["_GuiResult", "_args"];
+  _args params ["_grp", "_grouptype", "_NewGrouptype"];
+  if (_GuiResult) then 
+            {
+                _grp setVariable ["groupType",_NewGrouptype];
+                _grp setVariable ["groupTypeChange", "locked"];
+                systemChat format ["Project CombinedArms: %1 changed GroupType from '%2' to '%3' and will now recive %4 orders.", _grp, _grouptype, _NewGrouptype, _NewGrouptype];
+            }
+            else 
+            {
+                _grp setVariable ["groupTypeChange", "locked"];
+            };      
+};
+
 fnc_groupTypeChange = 
 {
 	_grp = _this;
@@ -140,18 +161,7 @@ fnc_groupTypeChange =
 		[_grp, _grouptype, _NewGrouptype] spawn 
 		{
 			params ["_grp", "_grouptype", "_NewGrouptype"];
-			[format ["Are you sure you want to change your GroupType from '%1' to '%2'?",_grouptype, _NewGrouptype], "Project CombinedArms", "Yes", "No", [] call BIS_fnc_displayMission, false, false] remoteExec ["BIS_fnc_guiMessage", leader _grp]; // -> not able to get the Result back
-			//_result = [format ["Are you sure you want to change your GroupType from '%1' to '%2'?",_grouptype, _NewGrouptype], "Project CombinedArms", "Yes", "No", [] call BIS_fnc_displayMission, false, false] call BIS_fnc_guiMessage;
-			if (_GuiResult) then 
-			{
-				_grp setVariable ["groupType",_NewGrouptype];
-				_grp setVariable ["groupTypeChange", "locked"];
-				systemChat format ["Project CombinedArms: %1 changed GroupType from '%2' to '%3' and will now recive %4 orders.", _grp, _grouptype, _NewGrouptype, _NewGrouptype];
-			}
-			else 
-			{
-				_grp setVariable ["groupTypeChange", "locked"];
-			};
+			[format ["Are you sure you want to change your GroupType from '%1' to '%2'?",_grouptype, _NewGrouptype], "fnc_messageResult", [_grp, _grouptype, _NewGrouptype]] remoteExec ["fnc_showSomeMessage", leader _grp];
 		};
 
 	};
@@ -172,6 +182,8 @@ fnc_groupTypeChange =
 	} forEach Units _grp;
 
 };
+
+
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
