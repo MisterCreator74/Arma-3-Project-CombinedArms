@@ -117,7 +117,7 @@ fnc_getGroupType =
 };
 
 
-fnc_showSomeMessage = {
+fnc_showGuiMessage = {
   params ["_message", "_callbackfn", "_callbackargs"];
   _Guiresult = [_message, "Project CombinedArms", "Yes", "No", [] call BIS_fnc_displayMission, false, false] call BIS_fnc_guiMessage;
   [_GuiResult, _callbackargs] remoteExec [_callbackfn, remoteExecutedOwner];
@@ -161,7 +161,7 @@ fnc_groupTypeChange =
 		[_grp, _grouptype, _NewGrouptype] spawn 
 		{
 			params ["_grp", "_grouptype", "_NewGrouptype"];
-			[format ["Are you sure you want to change your GroupType from '%1' to '%2'?",_grouptype, _NewGrouptype], "fnc_messageResult", [_grp, _grouptype, _NewGrouptype]] remoteExec ["fnc_showSomeMessage", leader _grp];
+			[format ["Are you sure you want to change your GroupType from '%1' to '%2'?",_grouptype, _NewGrouptype], "fnc_messageResult", [_grp, _grouptype, _NewGrouptype]] remoteExec ["fnc_showGuiMessage", leader _grp];
 		};
 
 	};

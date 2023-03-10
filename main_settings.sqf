@@ -18,8 +18,8 @@ repeat_Array_hints = false;
 use_project_combinedarms = true;
 startup_delay = 15;
 use_AICombat = true;
-use_AIOrders = false;				//requieres use_AICombat = true
-use_AI = false;						//requieres use_AICombat = true
+use_AIOrders = true;				//requieres use_AICombat = true
+use_AI = true;						//requieres use_AICombat = true
 use_setVariableWorkaround = false;
 use_CaptureMarkers = false; 		//requieres use_setVarableWorkaround = true
 

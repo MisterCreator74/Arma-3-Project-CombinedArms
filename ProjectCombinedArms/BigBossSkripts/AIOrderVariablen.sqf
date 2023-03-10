@@ -194,7 +194,7 @@ fnc_taskcreate = {
 
 
 			
-			if (_groupType == "transport" && _groupStatus == "mounted") then
+			if (_groupType == "infantry" && _groupStatus == "mounted") then
 			{
 
 				_transportGroup = _x getVariable "groupConnected";
