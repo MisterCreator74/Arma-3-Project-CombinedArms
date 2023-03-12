@@ -31,16 +31,15 @@ fnc_messageResult = {
             };      
 };
 
-publicVariable "fnc_showGuiMessage";
-publicVariable "fnc_messageResult";
 
 
 fnc_getGroupType = 
 {
 	private ["_grp","_vehlist","_cars","_apcs","_tanks","_helis","_planes","_boats","_veh","_type"];
+	params ["_grp"];
 
-	_grp = _this;
-
+	//_grp = _this;
+	
 	_vehlist = [];
 	_cars = 0;
 	_apcs = 0;
@@ -143,18 +142,22 @@ fnc_getGroupType =
 };
 
 
+publicVariable "fnc_showGuiMessage";
+publicVariable "fnc_messageResult";
+publicVariable "fnc_getGroupType";
+
+
 fnc_groupTypeChange = 
 {
-	_grp = _this;
+	params ["_grp"];
+	//_grp = _this;
 	_toChange = _grp getVariable ["PCA_groupTypeChange", "empty"];
 	_grouptype = _grp getVariable ["PCA_groupType", "empty"];
-
-	//hint format ["Type: %1 \n TypeChange: %2 \n Group: %3", _grouptype, _toChange, _grp];
 
 	{
 		if (isPlayer _x && _toChange == "empty") then  // if (leader group _x isPlayer && _toChange == "empty") then -> noch zu testen der Rest geht
 		{	
-			[_x, ["PCA: Change GroupType", { params ["_target"]; group _target setVariable ["PCA_GroupTypeChange", "change"]; }, nil, 98, false]] remoteExec ["addAction"];
+			[_x, ["PCA: Change GroupType", { params ["_target"]; group _target setVariable ["PCA_GroupTypeChange", "change", true]; }, nil, 98, false]] remoteExec ["addAction", _x];
 		};
 	} forEach Units _grp;
 
@@ -162,7 +165,7 @@ fnc_groupTypeChange =
 	
 	if (_grouptype == "empty") then
 	{
-		_grouptype = _grp call  fnc_getGroupType;
+		_grouptype = _grp call fnc_getGroupType;
 		_grp setVariable ["PCA_groupTypeChange", "change"];
 		_grp setVariable ["PCA_groupType",_grouptype];
 
@@ -198,7 +201,7 @@ fnc_groupTypeChange =
 		bluGroups = allGroups select {side _x == WEST};
 		opfGroups = allGroups select {side _x == EAST};
 		{
-			_x call fnc_groupTypeChange;
+			[_x] remoteExec ["fnc_groupTypeChange", 0];
 
 		}foreach allGroups;
 		
