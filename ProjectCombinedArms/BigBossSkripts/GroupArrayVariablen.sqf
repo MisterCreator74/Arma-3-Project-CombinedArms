@@ -9,14 +9,14 @@
 */
 
 
-fnc_showGuiMessage = {
+PCA_fnc_showGuiMessage = {
   params ["_message", "_callbackfn", "_callbackargs"];
   _Guiresult = [_message, "Project CombinedArms", "Yes", "No", [] call BIS_fnc_displayMission, false, false] call BIS_fnc_guiMessage;
   [_GuiResult, _callbackargs] remoteExec [_callbackfn, remoteExecutedOwner];
 };
 
 
-fnc_messageResult = {
+PCA_fnc_messageResult = {
   params ["_GuiResult", "_args"];
   _args params ["_grp", "_grouptype", "_NewGrouptype"];
   if (_GuiResult) then 
@@ -33,7 +33,7 @@ fnc_messageResult = {
 
 
 
-fnc_getGroupType = 
+PCA_fnc_getGroupType = 
 {
 	private ["_grp","_vehlist","_cars","_apcs","_tanks","_helis","_planes","_boats","_veh","_type"];
 	params ["_grp"];
@@ -142,12 +142,12 @@ fnc_getGroupType =
 };
 
 
-publicVariable "fnc_showGuiMessage";
-publicVariable "fnc_messageResult";
-publicVariable "fnc_getGroupType";
+publicVariable "PCA_fnc_showGuiMessage";
+publicVariable "PCA_fnc_messageResult";
+publicVariable "PCA_fnc_getGroupType";
 
 
-fnc_groupTypeChange = 
+PCA_fnc_groupTypeChange = 
 {
 	params ["_grp"];
 	//_grp = _this;
@@ -165,7 +165,7 @@ fnc_groupTypeChange =
 	
 	if (_grouptype == "empty") then
 	{
-		_grouptype = _grp call fnc_getGroupType;
+		_grouptype = _grp call PCA_fnc_getGroupType;
 		_grp setVariable ["PCA_groupTypeChange", "change"];
 		_grp setVariable ["PCA_groupType",_grouptype];
 
@@ -174,11 +174,11 @@ fnc_groupTypeChange =
 	if (_grouptype != "empty" && _toChange == "change") then
 	{
 		
-		_NewGrouptype = _grp call  fnc_getGroupType;
+		_NewGrouptype = _grp call  PCA_fnc_getGroupType;
 		[_grp, _grouptype, _NewGrouptype] spawn 
 		{
 			params ["_grp", "_grouptype", "_NewGrouptype"];
-			[format ["Are you sure you want to change your GroupType from '%1' to '%2'?",_grouptype, _NewGrouptype], "fnc_messageResult", [_grp, _grouptype, _NewGrouptype]] remoteExec ["fnc_showGuiMessage", leader _grp];
+			[format ["Are you sure you want to change your GroupType from '%1' to '%2'?",_grouptype, _NewGrouptype], "PCA_fnc_messageResult", [_grp, _grouptype, _NewGrouptype]] remoteExec ["PCA_fnc_showGuiMessage", leader _grp];
 		};
 
 	};
@@ -201,7 +201,7 @@ fnc_groupTypeChange =
 		bluGroups = allGroups select {side _x == WEST};
 		opfGroups = allGroups select {side _x == EAST};
 		{
-			[_x] remoteExec ["fnc_groupTypeChange", 0];
+			[_x] remoteExec ["PCA_fnc_groupTypeChange", 0];
 
 		}foreach allGroups;
 		
