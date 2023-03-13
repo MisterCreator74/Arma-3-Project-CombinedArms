@@ -6,7 +6,7 @@ Version 1.1.0 unstable Beta
 Author: MisterCreator74
 
 
-# Quick setup Guide
+### Quick setup Guide
 1. create a new Arma 3 mission
 2. clone the repository
 3. copy all the files in the main mission folder
