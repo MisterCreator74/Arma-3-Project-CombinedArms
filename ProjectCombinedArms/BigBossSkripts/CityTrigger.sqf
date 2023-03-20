@@ -1,3 +1,4 @@
+
 /*
 	Autor: MisterCreator74
 	Version: 1.6.4 - Neuer Array Typ - Beta Variante
@@ -5,9 +6,8 @@
 	Beinhaltet Stadtspeziefische Arrays. Und Funktionen sowie Sensoren um Rückmeldung über den Zustand von vordefinierten Städeten zu bekommen
 	
 	
-	Array Inhalt: [[position, name, größe, Status, prioBlu, prioOpf],[position, name, größe, Status, prioBlu, prioOpf]]
+	Array Inhalt: [[position, name, größe, Status, prioBlu, prioOpf, MarkerName ,TriggerName],[position, name, größe, Status, prioBlu, prioOpf, MarkerName,TriggerName]]
 	
-
 	Benötigete Marker:
 		"Base_Bluefor"  -> markiert Blufor Basis
 		"Base_Opfor"	-> markiert Opfor Basis
@@ -16,7 +16,6 @@
 														
 		"spawn_marker_nummer"
 */
-
 
 //getting all Map Markers
 _mapmarkers = allMapMarkers;
@@ -81,13 +80,14 @@ if (repeat_Array_hints == true) then
 // generating new Array Typ with subarrays
 {
 	_content = CityArray select _forEachIndex;
+	_markerName = _content;
 	_position = getmarkerpos _content; 
 	_content = _content splitString "_";
 	_prioBlu = _content select 4;
 	_prioBlu = parseNumber _prioBlu;
 	_prioOpf = _content select 5;
 	_prioOpf = parseNumber _prioOpf;
-	_newArraycontent = [_position,_content select 1, _content select 2, _content select 3, _prioBlu, _prioOpf];
+	_newArraycontent = [_position,_content select 1, _content select 2, _content select 3, _prioBlu, _prioOpf, _markerName];
 	CityArray set [_forEachIndex, _newArraycontent];
 }foreach CityArray;
 
@@ -158,8 +158,9 @@ if (repeat_Array_hints == true) then
 	
 	_nametrg = ["trg", _name, _groesse] joinstring "_";
 	_alreadySpawned = "notActivated";
-	_nametrgtext = _nametrg;
+	_nametrgtext = _nametrg;	
 	_nametrg = createTrigger ["EmptyDetector", _position];
+	_subarray set [7, _nametrg];
 	_nametrg setTriggerText _nametrgtext;
 	_nametrg setTriggerArea [city_size,city_size,city_size, false];
 	_nametrg setTriggerActivation ["Any","present", true];    //->evtl auf repaeting true setzen
@@ -457,24 +458,36 @@ sleep 1;
 
 
 
+// setVariable workaround -> Variables beeing set to triggers instead of markers
+0 spawn 
+{
+	sleep startup_delay;
 
-
-
-
-// Marker auf name überprüfen
-
-/* Nur wenn Spwanmarker da sind
-[] spawn 
+	while {true} do
 	{
-while {alive player} do
-	{
-		sleep 1;
-		markerDistance = SpawnMarker apply {[(getmarkerpos _x) distance2d player,_x]};
-		markerDistance sort true;
-		nearestMarker = markerDistance select 1;
 		
-		//hint format ["%1",nearestMarker] ;
-	};
-	
+		{
+
+			_position = _x select 0;
+			_name = _x select 1;
+			_groesse = _x select 2;
+			_status = _x select 3;
+			_prioBlu =  _x select 4;
+			_prioOpf = _x select 5;
+			_marker = _x select 6;
+			_trigger = _x select 7;
+			
+			_trigger setVariable ["PCA_CityPosition", _position, true];
+			_trigger setVariable ["PCA_CityName", _name, true];
+			_trigger setVariable ["PCA_CitySize", _groesse, true];
+			_trigger setVariable ["PCA_CityStatus", _status, true];
+			_trigger setVariable ["PCA_CityOpfPrio", _prioOpf, true];
+			_trigger setVariable ["PCA_CityBluPrio", _prioBlu, true];
+			_trigger setVariable ["PCA_CityMarker", _marker, true];
+			
+		}forEach CityArray ;
+		sleep 5;
+	};	
 };
-*/
+
+

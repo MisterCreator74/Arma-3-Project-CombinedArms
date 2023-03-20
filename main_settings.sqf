@@ -1,12 +1,12 @@
 /*
 	Autor: MisterCreator74
-	Version: 1.0.9
+	Version: 1.1.1
 	Beschreibung:
 	Beinhaltet alle grundlegenden Einstellungen für Arma 3 Advanced Scripts.
 	
 */
 
-_Version = "1.1.0 Unstable Beta";;
+_Version = "1.1.1 Unstable Beta";;
 
 // 1.Debug Settings:
 show_debug_hints = false;
@@ -18,10 +18,9 @@ repeat_Array_hints = false;
 use_project_combinedarms = true;
 startup_delay = 15;
 use_AICombat = true;
-use_AIOrders = true;				//requieres use_AICombat = true
+use_AIOrders = false;				//requieres use_AICombat = true
 use_AI = false;						//requieres use_AICombat = true
-use_setVariableWorkaround = false;
-use_CaptureMarkers = false; 		//requieres use_setVarableWorkaround = true
+use_CaptureMarkers = true; 
 
 // Kicks Player on friendly fire
 serverPassword = "";
@@ -94,9 +93,9 @@ if (use_project_combinedarms == true) then
 				[] execVM "ProjectCombinedArms\BigBossSkripts\VariableWorkaround.sqf";
 			};
 			
-			if (use_setVariableWorkaround == true && use_CaptureMarkers == true) then
+			if (use_CaptureMarkers == true) then
 				{
-					[] execVM "ProjectCombinedArms\BigBossSkripts\CaptureMarkers.sqf";
+					[] execVM "ProjectCombinedArms\AdditionalContent\CaptureMarkers.sqf";
 				};
 			
 			if (use_AICombat == true) then 
