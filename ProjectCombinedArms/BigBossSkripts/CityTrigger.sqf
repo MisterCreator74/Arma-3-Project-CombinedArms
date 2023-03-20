@@ -1,20 +1,28 @@
 
 /*
-	Autor: MisterCreator74
-	Version: 1.6.4 - Neuer Array Typ - Beta Variante
-	Beschreibung:
-	Beinhaltet Stadtspeziefische Arrays. Und Funktionen sowie Sensoren um Rückmeldung über den Zustand von vordefinierten Städeten zu bekommen
+	Author: MisterCreator74
+	Version: 1.7.0 
+	Description:
+	Includes city-specific arrays. And functions and sensors to get feedback about the state of predefined cities.
 	
+	Needed to run:
+	"Base_Blufor"   -> defines the Blufor Base
+	"Base_Opfor"	-> defines the Opfor Base
+	"city_CityName_Size_Status_PrioBlue_PrioOpf" -> Name can be any random string, Size can be "small" or "big", status can be contested, Blue, Opf, empty (Standard), BlueC und OpfC, prio can be number 1-3 or empty
 	
-	Array Inhalt: [[position, name, größe, Status, prioBlu, prioOpf, MarkerName ,TriggerName],[position, name, größe, Status, prioBlu, prioOpf, MarkerName,TriggerName]]
+	example:
+	city_NewYork_big_empty_3_1
 	
-	Benötigete Marker:
-		"Base_Bluefor"  -> markiert Blufor Basis
-		"Base_Opfor"	-> markiert Opfor Basis
-		"city_Stadtname_Größe_Status_PrioBlue_PrioOpf"-> Name kann random String (mit Leerzeichen)sein, Größe kann small oder big sein, Status kann contested, Blue, Opf, empty (Standard), BlueC und OpfC sein, 
-														PrioBlue und PrioOpf kann Zahl von 1-3 oder leer (Leerzeichen)	sein. Die Unterstriche sind wichtig!!!
-														
-		"spawn_marker_nummer"
+	available city variables are: 
+	PCA_CityPosition | PCA_CityName | PCA_CitySize | PCA_CityStatus | PCA_CityBluPrio | PCA_CityOpfPrio | PCA_CityMarker	
+	all variables can be globally retrieved and changed with: 
+	_trigger = CityArray select *insert city index here* select 7;
+	_variable = _trigger getVariable ["VariableName", "defaultValue if not assigned"];
+	
+
+		
+	Dev area only:
+	Array Content: [[position, name, größe, Status, prioBlu, prioOpf, MarkerName ,TriggerName],[position, name, größe, Status, prioBlu, prioOpf, MarkerName, TriggerName]]
 */
 
 //getting all Map Markers
@@ -53,7 +61,7 @@ if (_anzahlStaedte == 0) exitWith
 	};
 if (_anzahlBases < 2) exitWith
 	{
-		["Project CombinedArms: Not all Bases found, Array Skript terminated. Please make sure to place a Base_Bluefor & Base_Opfor marker in the editor"] remoteExec ["systemChat", 0];
+		["Project CombinedArms: Not all Bases found, Array Skript terminated. Please make sure to place a Base_Blufor & Base_Opfor marker in the editor"] remoteExec ["systemChat", 0];
 	};
 	
 	

@@ -88,11 +88,6 @@ if (use_project_combinedarms == true) then
 		{
 			[] execVM "ProjectCombinedArms\Settings\AICombat_settings.sqf";
 			[] execVM "ProjectCombinedArms\BigBossSkripts\CityTrigger.sqf";
-			if (use_setVariableWorkaround == true) then 
-			{
-				[] execVM "ProjectCombinedArms\BigBossSkripts\VariableWorkaround.sqf";
-			};
-			
 			if (use_CaptureMarkers == true) then
 				{
 					[] execVM "ProjectCombinedArms\AdditionalContent\CaptureMarkers.sqf";

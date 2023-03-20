@@ -1,7 +1,7 @@
 /*
-	Autor: MisterCreator74
+	Author: MisterCreator74
 	Version: 1.4
-	Beschreibung:
+	Description:
 	Gibt jedem Squad den jeweiligen SquadTyp. Dieser wird mit group getVariable ["PCA_groupType", "Standartwert"]; Abgefragt und kann über den Truppführer aktualisiert werden, damit auch neue Squads zugeordnert sind.
 	Zusätzlich wird ein Array mit allen Blufor und Opfor Squads erstellt.
 	Rückgabewerte: Blufor Array -> bluGroups; Opfor Array -> opfGroups;
