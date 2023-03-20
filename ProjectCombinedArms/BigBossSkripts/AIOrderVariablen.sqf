@@ -2,7 +2,7 @@
 	Autor: MisterCreator74
 	Version: 1.0
 	Beschreibung:
-	group Variables: groupType | PCA_groupStatus | PCA_groupTarget | PCA_groupConnected | PCA_groupTypeChange
+	group Variables: groupType | PCA_groupStatus | PCA_groupTarget | PCA_groupConnected | PCA_groupTypeChange | PCA_enableAutoOrders
 	Stati: In Caps -> Wegpunkte (z.B.: MOVE, GETIN) alles klein -> andere
 	
 	[group, taskposition, Taskdescription, Taskname, condition, Status/Waypointtype, Status when finished, vehicle] call taskcreate;
@@ -112,6 +112,7 @@ publicVariable "fnc_taskcreate";
 		{
 			_groupType = _x getVariable ["PCA_groupType", ""];
 			_groupStatus = _x getVariable ["PCA_groupStatus", "idle"];
+			_autoOrders = _x getVariable ["PCA_enableAutoOrders", "true"];
 			
 			// Target aquiering 
 			_target = sortedArrayBlu select 0;
@@ -119,74 +120,77 @@ publicVariable "fnc_taskcreate";
 			
 			
 			// Order Selection
-			if (_groupType == "infantry" && _groupStatus == "idle") then			
+			
+			if (_autoOrders == "true") then
 			{
-				_x setVariable ["PCA_groupTarget", _target];
-				_distance = leader _x distance2d _targetpos;
-				_savePos = [_targetpos, 200, 500, 20, 0, 20, 0, [],_targetpos] call BIS_fnc_findSafePos;
-				
-				// Aquiering Transport
-				if (_distance > 2000) then 
+				if (_groupType == "infantry" && _groupStatus == "idle") then			
 				{
-						
-					_transportGroup = ["groupType","transport","idle"] call fnc_findGroup; 										// Finding an transport group
-
-					if (isNull _transportGroup) then							 												// If no transportgroup was found
+					_x setVariable ["PCA_groupTarget", _target];
+					_distance = leader _x distance2d _targetpos;
+					_savePos = [_targetpos, 200, 500, 20, 0, 20, 0, [],_targetpos] call BIS_fnc_findSafePos;
+					
+					// Aquiering Transport
+					if (_distance > 2000) then 
 					{
-						hint "no transport found";
-						//[_x ,_savePos, "Move to the Objective", "MOVE", "this", "MOVE", "idle"] call fnc_taskcreate;
-						[_x ,_savePos, "Move to the Objective", "MOVE", "this", "MOVE", "idle"] remoteExec ["fnc_taskcreate", 0];
-					}
-					else 
-					{
-						_vehicle = vehicle leader _transportGroup;																// Finding Transport vehicle
-						_pos = getpos _vehicle;																					// Finding Vehicle Pos
-						_x setVariable ["PCA_groupConnected", _transportGroup];
-						_transportGroup setVariable ["PCA_groupConnected", _x];
-						_transportGroup setVariable ["PCA_groupStatus", "transporting"];
-						
-						if (getpos leader _transportGroup distance2d getPos leader _x > 1000) then 									// If transport is far away
-						{
-							[_transportGroup ,getPos leader _x, "Move to the Group", "MOVE", {_unitcount == count units _grp}, "MOVE", "idle", ""] call fnc_taskcreate;
 							
-							[_x ,_pos, "get in that vehicle", "GETIN", {
+						_transportGroup = ["groupType","transport","idle"] call fnc_findGroup; 										// Finding an transport group
 
-																					_numTotal = count (units _grp);
-																					_numInVeh = { _x in _vehicle } count (units _grp);																				 
-																					_numTotal == _numInVeh
-																					 }, "GETIN NEAREST", "mounted", _vehicle] call fnc_taskcreate;
+						if (isNull _transportGroup) then							 												// If no transportgroup was found
+						{
+							hint "no transport found";
+							//[_x ,_savePos, "Move to the Objective", "MOVE", "this", "MOVE", "idle"] call fnc_taskcreate;
+							[_x ,_savePos, "Move to the Objective", "MOVE", "this", "MOVE", "idle"] remoteExec ["fnc_taskcreate", 0];
 						}
 						else 
 						{
-
+							_vehicle = vehicle leader _transportGroup;																// Finding Transport vehicle
+							_pos = getpos _vehicle;																					// Finding Vehicle Pos
+							_x setVariable ["PCA_groupConnected", _transportGroup];
+							_transportGroup setVariable ["PCA_groupConnected", _x];
+							_transportGroup setVariable ["PCA_groupStatus", "transporting"];
 							
-							[_x ,_pos, "get in that vehicle", "GETIN", {
+							if (getpos leader _transportGroup distance2d getPos leader _x > 1000) then 									// If transport is far away
+							{
+								[_transportGroup ,getPos leader _x, "Move to the Group", "MOVE", {_unitcount == count units _grp}, "MOVE", "idle", ""] call fnc_taskcreate;
+								
+								[_x ,_pos, "get in that vehicle", "GETIN", {
 
-																					_numTotal = count (units _grp);
-																					_numInVeh = { _x in _vehicle } count (units _grp);																				 
-																					_numTotal == _numInVeh
-																					 }, "GETIN NEAREST", "mounted", _vehicle] call fnc_taskcreate;	//creating getin Order
+																						_numTotal = count (units _grp);
+																						_numInVeh = { _x in _vehicle } count (units _grp);																				 
+																						_numTotal == _numInVeh
+																						 }, "GETIN NEAREST", "mounted", _vehicle] call fnc_taskcreate;
+							}
+							else 
+							{
+
+								
+								[_x ,_pos, "get in that vehicle", "GETIN", {
+
+																						_numTotal = count (units _grp);
+																						_numInVeh = { _x in _vehicle } count (units _grp);																				 
+																						_numTotal == _numInVeh
+																						 }, "GETIN NEAREST", "mounted", _vehicle] call fnc_taskcreate;	//creating getin Order
+							};
 						};
+						
+					}
+					else
+					{
+						if (_distance < 500) then 
+						{
+							_target = _x getVariable "groupTarget";
+							_targetpos = _target select 0;
+							[_x ,_targetpos, "Attack the Objective", "Attack", {_grp getVariable "groupTarget" select 3 == "BlueC"}, "SAD", "idle", ""] call fnc_taskcreate;				// creating Attack Order -> TODO condtion
+						}
+						else 
+						{
+							[_x ,_savePos, "Move to the Objective", "MOVE", {_unitcount == count units _grp}, "MOVE", "idle", ""] call fnc_taskcreate;				// creating Move Order
+						};
+					
 					};
 					
-				}
-				else
-				{
-					if (_distance < 500) then 
-					{
-						_target = _x getVariable "groupTarget";
-						_targetpos = _target select 0;
-						[_x ,_targetpos, "Attack the Objective", "Attack", {_grp getVariable "groupTarget" select 3 == "BlueC"}, "SAD", "idle", ""] call fnc_taskcreate;				// creating Attack Order -> TODO condtion
-					}
-					else 
-					{
-						[_x ,_savePos, "Move to the Objective", "MOVE", {_unitcount == count units _grp}, "MOVE", "idle", ""] call fnc_taskcreate;				// creating Move Order
-					};
-				
 				};
-				
-			};
-			
+
 
 
 
@@ -228,7 +232,7 @@ publicVariable "fnc_taskcreate";
 			};
 			
 			
-
+			};
 		}forEach bluGroups;	
 		sleep 30;
 	};

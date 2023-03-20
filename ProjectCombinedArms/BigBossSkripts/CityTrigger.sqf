@@ -352,14 +352,15 @@ if (repeat_Array_hints == true) then
 
 
 sleep 1;
-["Project CombinedArms: System initialized"] remoteExec ["systemChat", 0];
+
+[format["Project CombinedArms: City system initialized with %1 recognized cities" , _anzahlStaedte]] remoteExec ["systemChat", 0];
 
 
 
 0 spawn 
 {	
 	sleep 5;
-	["Project CombinedArms: Priority System activated"] remoteExec ["systemChat", 0];
+	["Project CombinedArms: City priority system launched"] remoteExec ["systemChat", 0];
 
 	
 	while {true} do
