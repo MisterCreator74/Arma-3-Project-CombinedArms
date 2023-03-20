@@ -5,7 +5,7 @@
 	
 */
 
-max_AI_Troops = 0; 	  // Max Ai Troops per Site
+max_AI_Troops = 10; 	  // Max Ai Troops per Site
 max_Troops_Overhead = 10; // Max Troops that can be spawned more then the limit for player interactions
 max_AI_Transport = 6;
 max_AI_Tanks = 2;

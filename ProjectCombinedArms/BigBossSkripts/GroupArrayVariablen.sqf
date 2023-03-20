@@ -155,7 +155,7 @@ PCA_fnc_groupTypeChange =
 	_grouptype = _grp getVariable ["PCA_groupType", "empty"];
 
 	{
-		if (isPlayer leader group _x && _toChange == "empty") then  // if (leader group _x isPlayer && _toChange == "empty") then -> noch zu testen der Rest geht
+		if ( isPlayer _x && _x == leader group _x && _toChange == "empty") then  // if (leader group _x isPlayer && _toChange == "empty") then -> noch zu testen der Rest geht
 		{	
 			[_x, ["PCA: Change GroupType", { params ["_target"]; group _target setVariable ["PCA_GroupTypeChange", "change", true]; }, nil, 99, false]] remoteExec ["addAction", _x];
 			[_x, ["PCA: enable/disable auto orders", { params ["_target"]; _autoOrders =  group _target getVariable ["PCA_enableAutoOrders", "true"]; if (_autoOrders == "true") then {group _target setVariable ["PCA_enableAutoOrders", "false", true]; ["PCA auto orders disabled"] remoteExec ["hint", _target];} else {group _target setVariable ["PCA_enableAutoOrders", "true", true]; ["PCA auto orders enabled"] remoteExec ["hint", _target];}; }, nil, 98, false]] remoteExec ["addAction", _x];
