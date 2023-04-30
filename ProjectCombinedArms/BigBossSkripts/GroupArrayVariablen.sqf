@@ -1,10 +1,15 @@
 /*
 	Author: MisterCreator74
-	Version: 1.4
+	Version: 1.5
+	
 	Description:
-	Gibt jedem Squad den jeweiligen SquadTyp. Dieser wird mit group getVariable ["PCA_groupType", "Standartwert"]; Abgefragt und kann über den Truppführer aktualisiert werden, damit auch neue Squads zugeordnert sind.
-	Zusätzlich wird ein Array mit allen Blufor und Opfor Squads erstellt.
-	Rückgabewerte: Blufor Array -> bluGroups; Opfor Array -> opfGroups;
+	Main functions of this script: 
+	1. give every squad a squadtyp
+	2. give the squadleader the ability to change the squadtype (search for: Change GroupType)
+	3. enable/disable auto orders for every squad form the leader (search for: auto orders)
+	4. return an array with all the Blufor groups (bluGroups) and one with all the Opfor groups (opfGroups)
+	
+	grouptype can be retrieved with: groupname getVariable ["PCA_groupType", "Standartwert"];
 	
 */
 
@@ -153,6 +158,11 @@ PCA_fnc_groupTypeChange =
 	//_grp = _this;
 	_toChange = _grp getVariable ["PCA_groupTypeChange", "empty"];
 	_grouptype = _grp getVariable ["PCA_groupType", "empty"];
+	
+	if (count units _grp < 1) exitWith
+	{
+
+	};
 
 	{
 		if ( isPlayer _x && _x == leader group _x && _toChange == "empty") then  // if (leader group _x isPlayer && _toChange == "empty") then -> noch zu testen der Rest geht

@@ -1,6 +1,6 @@
 /*
 	Autor: MisterCreator74
-	Version: 1.1.1
+	Version: 1.1.2
 	Beschreibung:
 	Beinhaltet alle grundlegenden Einstellungen für Arma 3 Advanced Scripts.
 	
@@ -18,8 +18,8 @@ repeat_Array_hints = false;
 use_project_combinedarms = true;
 startup_delay = 15;
 use_AICombat = true;
-use_AIOrders = false;				//requieres use_AICombat = true
-use_AI = false;						//requieres use_AICombat = true
+use_AIOrders = true;				//requieres use_AICombat = true
+use_AI = true;						//requieres use_AICombat = true
 use_CaptureMarkers = true; 
 
 // Kicks Player on friendly fire
