@@ -53,7 +53,7 @@ _savePos = [getMarkerPos "Base_Opfor", 0, 100, 20, 0, 20, 0, [],getMarkerPos "Ba
 			
 			if (_WUnits < (max_AI_Troops * 0.8)) then
 				{
-					//hint "threshold activated";
+					hint "threshold activated";
 					_savePos = [getMarkerPos "Base_Blufor", 0, 100, 20, 0, 20, 0, [],getMarkerPos "Base_Blufor"] call BIS_fnc_findSafePos;
 					[_savePos, WEST , AI_TroopSize,[], [], [], [], [], 0, true, 1] call BIS_fnc_spawnGroup;
 				};

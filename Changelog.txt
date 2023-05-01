@@ -22,5 +22,6 @@ V1.0.9 - Change SquadType System established. Not tested in multiplayer
 V1.1.0 - Change SquadType System improved and optimized for multiplayer and Servers - changed system to remotExec
 V1.1.1 - enable/disable auto orders, variable workaround for cities integrated in the main city script, capture markers established
 V1.1.2 - made groupsystem skip empty groups 
+V1.1.3 - improved cancel oder system for multiplayer, complete rewrite of infantry oder system
 
 

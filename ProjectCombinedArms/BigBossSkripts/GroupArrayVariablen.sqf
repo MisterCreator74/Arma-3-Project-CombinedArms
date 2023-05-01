@@ -161,7 +161,8 @@ PCA_fnc_groupTypeChange =
 	
 	if (count units _grp < 1) exitWith
 	{
-
+		_grp setVariable ["PCA_groupTypeChange", "empty"];
+		_grp setVariable ["PCA_groupType", "empty"];
 	};
 
 	{

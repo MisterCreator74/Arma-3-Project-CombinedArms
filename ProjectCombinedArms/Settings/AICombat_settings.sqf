@@ -24,6 +24,8 @@ capture_time = 10; // Time it takes to capture a sector
 
 defending_squads = 2; //Max Squads defending
 
+attacking_squads = 3; // max infantry squads per sector
+
 max_spwans_cycle = 10; //Max Spwans per Skript cycle
 
 city_size = 300;
