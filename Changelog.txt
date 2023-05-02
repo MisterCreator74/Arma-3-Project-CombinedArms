@@ -24,5 +24,6 @@ V1.1.1 - enable/disable auto orders, variable workaround for cities integrated i
 V1.1.2 - made groupsystem skip empty groups 
 V1.1.3 - improved cancel oder system for multiplayer, complete rewrite of infantry oder system
 V1.1.4 - several small fixes, tank+cas rtb order
+V1.1.5 - Debug menu changes
 
 

@@ -6,7 +6,7 @@
 	
 */
 
-_Version = "1.1.4 stable, unfinished alpha";;
+_Version = "1.1.5 stable, unfinished alpha";;
 
 // 1.Debug Settings:
 show_debug_hints = false;
@@ -51,7 +51,7 @@ use_advanced_garbagecollector = false;
 //Anzeigen der Debug Hinweise:
 if (show_debug_hints == true) then 
 	{	
-		settingsArray = [show_debug_hints, use_project_combinedarms, use_random_events, use_dynamic_ressources, use_advanced_garbagecollector, use_AICombat, use_playerKick];
+		settingsArray = [show_debug_hints, use_project_combinedarms, use_AICombat, use_AIOrders, use_AI, use_playerKick, use_CaptureMarkers, use_dynamic_ressources, use_random_events];
 
 		{if (_x == true) then
 			{
@@ -66,16 +66,17 @@ if (show_debug_hints == true) then
 		_head = parseText "<t size='2.0'>Debugmenu:</t>";
 		_ver = parseText "<br/><t color='#0088ff'>Version:  </t>";
 		_separator = parseText "<br/>--------------------------------------------------------<br/>";
-		_text1 = parseText "<br/><br/>Debug Hints:                                         ";
-		_text2 = parseText "<br/>Project CombinedArms:                     ";
-		_text3 = parseText "<br/>Random Events:                                 ";
-		_text4 = parseText "<br/>Dynamic Ressources:                       ";
-		_text5 = parseText "<br/>advanced Garbage Collector:          ";
-		_text6 = parseText "<br/>AICombat:                                         ";
-		_text7 = parseText "<br/>PlayerKick:                                    ";
-//		_text8 = parseText "<br/>Random Events:                      ";
+		_text1 = parseText "<br/><br/>Debug Hints:                                                 ";
+		_text2 = parseText "<br/>Project CombinedArms (main project):  ";
+		_text3 = parseText "<br/>enable combat (Array scripts):                 ";
+		_text4 = parseText "<br/>enable orders (order scripts):                    ";
+		_text5 = parseText "<br/>enable bots (spawning them):                   ";
+		_text6 = parseText "<br/>enable PlayerKick (friendly fire addon): ";
+		_text7 = parseText "<br/>enable capture markers (map addon):   ";
+		_text8 = parseText "<br/>enable dynamic ressources (addon):     ";
+		_text9 = parseText "<br/>enable Random Events:                             ";
 		_debugMenu = composeText [_head, _ver,_Version, _separator, "Settings can be made in main_settings.sqf",_text1, settingsArray select 0 , _text2, settingsArray select 1, _text3, settingsArray select 2,
-									_text4, settingsArray select 3, _text5, settingsArray select 4, _text6, settingsArray select 5, _text7, settingsArray select 6]; //, _text8, settingsArray select 7];
+									_text4, settingsArray select 3, _text5, settingsArray select 4, _text6, settingsArray select 5, _text7, settingsArray select 6, _text8, settingsArray select 7, _text9, settingsArray select 8];
 
 		hint _debugMenu;
 		sleep debug_hint_time;
@@ -129,6 +130,3 @@ if (use_advanced_garbagecollector == true) then
 		{
 			[] execVM "ProjectCombinedArms\AdditionalContent\Garbage Collector.sqf";
 		};
-
-
-//[] execVM "ProjectCombinedArms\BigBossSkripts\CityTriggerNeu.sqf";
