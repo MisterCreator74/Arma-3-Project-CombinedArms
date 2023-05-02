@@ -5,7 +5,7 @@
 	group Variables: groupType | PCA_groupStatus | PCA_groupTarget | PCA_groupConnected | PCA_groupTypeChange | PCA_enableAutoOrders
 	Stati: In Caps -> Wegpunkte (z.B.: MOVE, GETIN) alles klein -> andere
 	
-	available taskTypes: infantry_movement | infantry_transport | air_support
+	available taskTypes: infantry_movement | infantry_transport | infantry_capture | air_support
 	
 
 	
@@ -197,11 +197,19 @@ publicVariable "fnc_taskcreate";
 			_groupType = _x getVariable ["PCA_groupType", ""];
 			_groupStatus = _x getVariable ["PCA_groupStatus", "idle"];
 			_autoOrders = _x getVariable ["PCA_enableAutoOrders", "true"];
+			_groupTarget = _x getVariable ["PCA_groupTarget", ""];
 			
-			// Target aquiering 
+			
+			// Target aquiering
+			if (_groupTarget == "") then 
+				{
+				
+				};
 			_target = sortedArrayBlu select 0;
 			_targetpos = _target select 0;
 			_trigger = _target select 7;
+			
+			
 			
 
 			
@@ -226,7 +234,7 @@ publicVariable "fnc_taskcreate";
 									if (_distance > 2000) then 
 										{
 											//_transportGroup = ["groupType","transport","idle"] call PCA_fnc_findGroup;
-											hint "TODO";
+											["You´re now supposed to get advanced tasks but they are not implemented yet :("] remoteExec ["hint", leader _x];
 										}
 										else
 										{
@@ -249,19 +257,43 @@ publicVariable "fnc_taskcreate";
 					// transport orders
 					if (_groupType == "transport") then
 						{
-						
+
+								
 						};
 					
 					//	cas orders				
 					if (_groupType == "CAS") then
 						{
-						
+							// when fuel active task is canceled and RTB task is given, completes when vehicle is refueld
+							if (fuel vehicle leader _x < 0.2 AND _groupStatus != "RTB") then 
+								{
+									_currentTask = currentTask leader _x;
+									hint str _currentTask;
+									leader _x removeSimpleTask _currentTask;								
+									["air_support", getMarkerpos "Base_Blufor", "RTB: refuel, rearm", "return to base, refuel and rearm", "MOVE", _x, {fuel vehicle leader _grp > 0.9}, "RTB", "idle", "", ""] call PCA_fnc_taskcreate;
+								};
+								
+							if (_groupStatus == "idle") then
+								{
+									["air_support", getMarkerpos "Base_Blufor", "Wait for orders", "make sure your Vehicle is ready for takeoff, refuel, rearm and wait for orders", "HOLD", _x, {_grp getVariable ["groupReady", "idle"] == "ready"}, "ready", "ready", "", ""] call PCA_fnc_taskcreate;
+								};
+								
+							if (_groupStatus == "ready") then
+								{
+									["You´re now supposed to get advanced tasks but they are not implemented yet :("] remoteExec ["hint", leader _x];
+								};						
 						};
 						
 					// tank orders
 					if (_groupType == "tank") then
 						{
-						
+							if (fuel vehicle leader _x < 0.2 AND _groupStatus != "RTB") then 
+								{
+									_currentTask = currentTask leader _x;
+									hint str _currentTask;
+									leader _x removeSimpleTask _currentTask;								
+									["air_support", getMarkerpos "Base_Blufor", "RTB: refuel, rearm", "return to base, refuel and rearm", "MOVE", _x, {fuel vehicle leader _grp > 0.9}, "RTB", "ready", "", ""] call PCA_fnc_taskcreate;
+								};						
 						};
 			
 				};
