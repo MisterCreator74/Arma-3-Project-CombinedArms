@@ -214,9 +214,9 @@ PCA_fnc_groupTypeChange =
 		opfGroups = allGroups select {side _x == EAST};
 		{
 			[_x] remoteExec ["PCA_fnc_groupTypeChange", 0];
+			
 
 		}foreach allGroups;
-		
 		sleep 5;
 	};
 };

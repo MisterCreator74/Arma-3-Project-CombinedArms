@@ -1,12 +1,12 @@
 /*
 	Autor: MisterCreator74
-	Version: 1.1.4
+	Version: 1.1.6
 	Beschreibung:
 	Beinhaltet alle grundlegenden Einstellungen für Arma 3 Advanced Scripts.
 	
 */
 
-_Version = "1.1.5 stable, unfinished alpha";;
+_Version = "1.1.6 stable, unfinished alpha";;
 
 // 1.Debug Settings:
 show_debug_hints = false;

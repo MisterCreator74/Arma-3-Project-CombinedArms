@@ -1,18 +1,46 @@
 /*
 	Autor: MisterCreator74
-	Version: 1.1
+	Version: 1.2
 	Beschreibung:
-	group Variables: groupType | PCA_groupStatus | PCA_groupTarget | PCA_groupConnected | PCA_groupTypeChange | PCA_enableAutoOrders
+	group Variables: PCA_groupType | PCA_groupStatus | PCA_groupTarget | PCA_groupConnected | PCA_groupTypeChange | PCA_enableAutoOrders
 	Stati: In Caps -> Wegpunkte (z.B.: MOVE, GETIN) alles klein -> andere
 	
 	available taskTypes: infantry_movement | infantry_transport | infantry_capture | air_support
+	
 	
 
 	
 */
 sleep 2;
 
+PCA_fnc_targetFinding = {
+params ["_grp"];
+_groupTarget = _grp getVariable ["PCA_groupTarget", []];
+_index = 0;
+if (count _groupTarget == 0) then 
+	{
+		for "_i" from 0 to count sortedArrayBlu do
+			{
+				_target = sortedArrayBlu select _i;
+				_trigger = _target select 7;
+				_connectedGroups = _trigger getVariable ["PCA_connectedGroups", []];
+				_noConnectedGroups = count _connectedGroups;
+				if (_noConnectedGroups <= attacking_squads) then
+					{
+						_connectedGroups pushBack _grp; 						// for groupDeletion do _connectedGroups = _connectedGroups - [_grp];
+						_trigger setVariable ["PCA_connectedGroups", _connectedGroups];
+						_grp setVariable ["PCA_groupTarget", _target];
+						breakWith _target;
+					};
+			};
 
+	}
+	else 
+	{
+		_groupTarget
+	};
+
+};
 
 PCA_fnc_findGroup = {
 params ["_variable", "_search", "_status"];
@@ -34,6 +62,10 @@ params ["_taskID", "_grp"];
 [_taskID,"Canceled", true] call BIS_fnc_taskSetState;
 _grp setVariable ["PCA_groupStatus","idle", true];
 deleteWaypoint [_grp,1]; 
+_trigger = _grp getVariable ["PCA_groupTarget", []] select 7;
+_connectedGroups = _trigger getVariable ["PCA_connectedGroups", []];
+_connectedGroups = _connectedGroups - [_grp];
+_trigger setVariable ["PCA_connectedGroups", _connectedGroups];
 };
 
 
@@ -77,6 +109,10 @@ PCA_fnc_taskcreate = {
 			{
 				if (_taskType == "infantry_capture") then 
 					{
+						_trigger = _grp getVariable ["PCA_groupTarget", []] select 7;						
+						_connectedGroups = _trigger getVariable ["PCA_connectedGroups", []];
+						_connectedGroups = _connectedGroups - [_grp];
+						_trigger setVariable ["PCA_connectedGroups", _connectedGroups];
 						_grp setVariable ["PCA_groupTarget", ""];
 					};
 					
@@ -90,7 +126,7 @@ PCA_fnc_taskcreate = {
 						
 
 					};
-				_grp setVariable ["PCA_groupStatus",_statusfinished];
+				_grp setVariable ["PCA_groupStatus",_finishedStatus];
 				[_taskID,"Succeeded", true] call BIS_fnc_taskSetState;
 				_actionID = leader _grp getVariable ["PCA_cancelActionID", ""];
 				leader _grp removeAction _actionID;
@@ -128,19 +164,12 @@ publicVariable "PCA_fnc_findGroup";
 			_groupType = _x getVariable ["PCA_groupType", ""];
 			_groupStatus = _x getVariable ["PCA_groupStatus", "idle"];
 			_autoOrders = _x getVariable ["PCA_enableAutoOrders", "true"];
-			_groupTarget = _x getVariable ["PCA_groupTarget", ""];
+
 			
 			
 			// Target aquiering
-			if (_groupTarget == "") then 
-				{
-					
-				};
-			_target = sortedArrayBlu select 0;
+			_target = _x call PCA_fnc_targetFinding;
 			_targetpos = _target select 0;
-			_trigger = _target select 7;
-			
-			
 			
 
 			
@@ -160,21 +189,21 @@ publicVariable "PCA_fnc_findGroup";
 									//_connectedGroups = _trigger getVariable ["PCA_connectedGroups", 0];
 									//_trigger setVariable ["PCA_connectedGroups", _connectedGroups +1];
 									_distance = leader _x distance2d _targetpos;
-									_savePos = [_targetpos, 200, 500, 20, 0, 20, 0, [],_targetpos] call BIS_fnc_findSafePos;
+									_savePos = [_targetpos, 300, 500, 20, 0, 20, 0, [],_targetpos] call BIS_fnc_findSafePos;
 									
 									if (_distance > 2000) then 
 										{
 											//_transportGroup = ["groupType","transport","idle"] call PCA_fnc_findGroup;
 											["You´re now supposed to get advanced tasks but they are not implemented yet :("] remoteExec ["hint", leader _x];
+											["infantry_movement", _savepos, "Move", "move to the objective", "MOVE", _x, {_unitcount == count units _grp}, "moving", "idle", "", ""] call PCA_fnc_taskcreate;
 										}
 										else
 										{
 											if (_distance < 500) then 
 												{
-													_target = _x getVariable "groupTarget";
+													_target = _x getVariable ["PCA_groupTarget", ""];
 													_targetpos = _target select 0;
-
-													["infantry_capture", _targetpos, "Attack", "attack the objective", "SAD", _x, {_grp getVariable "groupTarget" select 3 == "BlueC"}, "attacking", "idle", "", ""] call PCA_fnc_taskcreate;
+													["infantry_capture", _targetpos, "Attack", "attack the objective", "SAD", _x, {_grp getVariable ["PCA_groupTarget", ""] select 3 == "BlueC"}, "attacking", "idle", "", ""] call PCA_fnc_taskcreate;
 													
 												}
 												else 
@@ -199,7 +228,6 @@ publicVariable "PCA_fnc_findGroup";
 							if (fuel vehicle leader _x < 0.2 AND _groupStatus != "RTB") then 
 								{
 									_currentTask = currentTask leader _x;
-									hint str _currentTask;
 									leader _x removeSimpleTask _currentTask;								
 									["air_support", getMarkerpos "Base_Blufor", "RTB: refuel, rearm", "return to base, refuel and rearm", "MOVE", _x, {fuel vehicle leader _grp > 0.9}, "RTB", "idle", "", ""] call PCA_fnc_taskcreate;
 								};
@@ -221,14 +249,12 @@ publicVariable "PCA_fnc_findGroup";
 							if (fuel vehicle leader _x < 0.2 AND _groupStatus != "RTB") then 
 								{
 									_currentTask = currentTask leader _x;
-									hint str _currentTask;
 									leader _x removeSimpleTask _currentTask;								
 									["air_support", getMarkerpos "Base_Blufor", "RTB: refuel, rearm", "return to base, refuel and rearm", "MOVE", _x, {fuel vehicle leader _grp > 0.9}, "RTB", "ready", "", ""] call PCA_fnc_taskcreate;
 								};						
 						};
 			
-				};
-		sleep 1;		
+				};		
 		}forEach bluGroups;	
 		sleep 30;
 	};
