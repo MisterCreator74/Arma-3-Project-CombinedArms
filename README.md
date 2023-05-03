@@ -1,5 +1,5 @@
 # Arma-3-Project-CombinedArms
-for more information take a look at the [Project CombinedArms Wki](https://github.com/MisterCreator74/Arma-3-Project-CombinedArms/wiki)
+for more information take a look at the [Project CombinedArms Wiki](https://github.com/MisterCreator74/Arma-3-Project-CombinedArms/wiki)
 
 Version 1.1.4 stable, unfinished alphy with limited functionality 
 
