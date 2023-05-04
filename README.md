@@ -11,6 +11,6 @@ Author: MisterCreator74
 ### Quick setup Guide
 1. create a new Arma 3 mission
 2. clone the repository
-3. copy all the files in the main mission folder
+3. copy all the files into your main mission folder (located at C/Documents/Arma3/missions or C/Documents/Arma3 - Other Profiles/yourProfileName/missions/yourMissionName)
 4. place the markers: "Base_Blufor", "Base_Opfor" and at least one City Marker
 5. enjoy the game or take a look at the customizability -> for more information take a look at the wiki
